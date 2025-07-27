@@ -8,8 +8,9 @@ import Layout from './components/Layout.jsx';
 import HomePage from './pages/HomePage.jsx';
 import ShopPage from './pages/ShopPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
+import ContactPage from './pages/ContactPage.jsx'; // Ensure this is imported
 import CartPage from './pages/CartPage.jsx';
-import SearchResultsPage from './pages/SearchResultsPage.jsx'; // <-- IMPORT SEARCH PAGE
+import SearchResultsPage from './pages/SearchResultsPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 
@@ -32,8 +33,10 @@ const App = () => {
         <Route index element={<HomePage />} />
         <Route path="shop" element={<ShopPage />} />
         <Route path="about" element={<AboutPage />} />
+        {/* This line tells the app to render ContactPage on the /contact route */}
+        <Route path="contact" element={<ContactPage />} />
         <Route path="cart" element={<CartPage />} />
-        <Route path="search" element={<SearchResultsPage />} /> {/* <-- ADD SEARCH ROUTE */}
+        <Route path="search" element={<SearchResultsPage />} />
       </Route>
 
       {/* Standalone pages */}
