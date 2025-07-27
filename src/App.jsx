@@ -6,35 +6,42 @@ import Layout from './components/Layout.jsx';
 
 // Page Components
 import HomePage from './pages/HomePage.jsx';
-import ShopPage from './pages/ShopPage.jsx'; // <-- IMPORT SHOP PAGE
-import AboutPage from './pages/AboutPage.jsx'; // <-- IMPORT ABOUT PAGE
+import ShopPage from './pages/ShopPage.jsx';
+import AboutPage from './pages/AboutPage.jsx';
+import CartPage from './pages/CartPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 
 const App = () => {
-  // Check for user info to manage route access
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  // Added a try-catch block for safer parsing from localStorage.
+  // This prevents the app from crashing if the stored data is malformed.
+  let userInfo = null;
+  try {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUserInfo) {
+      userInfo = JSON.parse(storedUserInfo);
+    }
+  } catch (error) {
+    console.error("Failed to parse userInfo from localStorage:", error);
+    // If parsing fails, it's good practice to clear the corrupted item.
+    localStorage.removeItem('userInfo');
+  }
 
   return (
     <Routes>
-      {/* ROUTES WRAPPED IN LAYOUT (Header & Footer) */}
+      {/* All pages with the main Header and Footer */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="shop" element={<ShopPage />} />      {/* <-- ADD SHOP ROUTE */}
-        <Route path="about" element={<AboutPage />} />    {/* <-- ADD ABOUT ROUTE */}
+        <Route path="shop" element={<ShopPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="cart" element={<CartPage />} />
       </Route>
 
-      {/* STANDALONE ROUTES (No Header/Footer from Layout) */}
-      <Route 
-        path="/login" 
-        element={!userInfo ? <LoginPage /> : <Navigate to="/" />} 
-      />
-      <Route 
-        path="/register" 
-        element={!userInfo ? <RegisterPage /> : <Navigate to="/" />} 
-      />
+      {/* Standalone pages */}
+      <Route path="/login" element={!userInfo ? <LoginPage /> : <Navigate to="/" />} />
+      <Route path="/register" element={!userInfo ? <RegisterPage /> : <Navigate to="/" />} />
       
-      {/* Catch-all route to redirect unknown paths */}
+      {/* Redirect any unknown URL to the homepage */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
