@@ -1,8 +1,5 @@
-// /frontend/src/pages/HomePage.jsx
-
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, LogOut } from 'lucide-react';
+import { Link } from 'react-router-dom'; // Link might still be useful for product cards
 
 // --- Mock Data for Products ---
 // In a real application, you would fetch this data from your backend API
@@ -36,49 +33,6 @@ const featuredProducts = [
 
 // --- Reusable Components ---
 
-const Header = () => {
-  const navigate = useNavigate();
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-  const logoutHandler = () => {
-    localStorage.removeItem('userInfo');
-    navigate('/login');
-  };
-
-  return (
-    <header className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-amber-800">
-          Sovereign Woodcraft
-        </Link>
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="text-gray-700 hover:text-amber-600">Home</Link>
-          <Link to="/shop" className="text-gray-700 hover:text-amber-600">Shop</Link>
-          <Link to="/about" className="text-gray-700 hover:text-amber-600">About</Link>
-        </nav>
-        <div className="flex items-center space-x-4">
-          <button className="text-gray-700 hover:text-amber-600">
-            <ShoppingCart size={24} />
-          </button>
-          {userInfo ? (
-            <div className="flex items-center space-x-2">
-              <span className="hidden sm:inline text-gray-700">Hi, {userInfo.name.split(' ')[0]}</span>
-              <button onClick={logoutHandler} className="text-gray-700 hover:text-amber-600">
-                <LogOut size={24} />
-              </button>
-            </div>
-          ) : (
-            <Link to="/login" className="flex items-center text-gray-700 hover:text-amber-600">
-              <User size={24} />
-              <span className="ml-2 hidden sm:inline">Login</span>
-            </Link>
-          )}
-        </div>
-      </div>
-    </header>
-  );
-};
-
 const ProductCard = ({ product }) => (
   <div className="bg-white rounded-lg shadow-lg overflow-hidden group">
     <div className="relative">
@@ -96,21 +50,12 @@ const ProductCard = ({ product }) => (
   </div>
 );
 
-const Footer = () => (
-    <footer className="bg-gray-800 text-white mt-16">
-        <div className="container mx-auto px-6 py-8 text-center">
-            <p>&copy; {new Date().getFullYear()} Sovereign Woodcraft. All Rights Reserved.</p>
-        </div>
-    </footer>
-);
-
 
 // --- Main HomePage Component ---
 
 const HomePage = () => {
   return (
     <div className="bg-gray-50">
-      <Header />
       
       <main>
         {/* Hero Section */}
@@ -141,7 +86,6 @@ const HomePage = () => {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 };
