@@ -9,12 +9,11 @@ import HomePage from './pages/HomePage.jsx';
 import ShopPage from './pages/ShopPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import CartPage from './pages/CartPage.jsx';
+import SearchResultsPage from './pages/SearchResultsPage.jsx'; // <-- IMPORT SEARCH PAGE
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 
 const App = () => {
-  // Added a try-catch block for safer parsing from localStorage.
-  // This prevents the app from crashing if the stored data is malformed.
   let userInfo = null;
   try {
     const storedUserInfo = localStorage.getItem('userInfo');
@@ -23,7 +22,6 @@ const App = () => {
     }
   } catch (error) {
     console.error("Failed to parse userInfo from localStorage:", error);
-    // If parsing fails, it's good practice to clear the corrupted item.
     localStorage.removeItem('userInfo');
   }
 
@@ -35,13 +33,13 @@ const App = () => {
         <Route path="shop" element={<ShopPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="cart" element={<CartPage />} />
+        <Route path="search" element={<SearchResultsPage />} /> {/* <-- ADD SEARCH ROUTE */}
       </Route>
 
       {/* Standalone pages */}
       <Route path="/login" element={!userInfo ? <LoginPage /> : <Navigate to="/" />} />
       <Route path="/register" element={!userInfo ? <RegisterPage /> : <Navigate to="/" />} />
       
-      {/* Redirect any unknown URL to the homepage */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

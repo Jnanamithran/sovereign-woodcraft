@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, LogOut, Search } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 
 const Header = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(''); // State for the search input
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const { cartCount } = useCart();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // Prevent form from reloading the page
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${searchQuery}`);
+      setSearchQuery(''); // Clear input after search
+    }
+  };
 
   const logoutHandler = () => {
     localStorage.removeItem('userInfo');
@@ -34,17 +43,25 @@ const Header = () => {
         {/* Search, Cart & User */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           
-          {/* Search Bar */}
-          <div className="relative hidden md:block">
-             <input type="search" placeholder="Search..." className="py-2 px-4 w-40 lg:w-56 rounded-full border border-gray-300 bg-gray-100/50 focus:outline-none focus:ring-2 focus:ring-amber-500"/>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none"><Search className="h-5 w-5 text-gray-400" /></div>
-          </div>
+          {/* ## SEARCH FORM ## */}
+          <form onSubmit={handleSearchSubmit} className="relative hidden md:block">
+             <input 
+              type="search" 
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="py-2 pl-4 pr-10 w-40 lg:w-56 rounded-full border border-gray-300 bg-gray-100/50 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+            />
+            <button type="submit" className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <Search className="h-5 w-5 text-gray-400 hover:text-amber-700" />
+            </button>
+          </form>
           
-          {/* ## FIX: WRAPPED CART ICON IN A LINK ## */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-amber-600 p-2 rounded-full hover:bg-gray-100 transition-colors">
+          {/* Cart Icon */}
+          <Link to="/cart" className="relative text-gray-700 hover:text-amber-600 p-2 rounded-full hover:bg-gray-100">
             <ShoppingCart size={24} />
             {cartCount > 0 && (
-              <span className="absolute top-0 right-0 block h-5 w-5 transform -translate-y-1/2 translate-x-1/2 rounded-full bg-red-600 text-white text-xs flex items-center justify-center font-bold">
+              <span className="absolute top-0 right-0 block h-5 w-5 transform -translate-y-1/2 translate-x-1/2 rounded-full bg-red-600 text-white text-xs flex items-center justify-center">
                 {cartCount}
               </span>
             )}
