@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext.jsx'; // Correct import with .jsx
+import { useCart } from '../context/CartContext.jsx';
 import { Trash2, Plus, Minus, ShoppingCart, ArrowLeft } from 'lucide-react';
 
 const CartPage = () => {
@@ -33,30 +33,44 @@ const CartPage = () => {
             <div className="lg:w-2/3">
               <div className="bg-white shadow-md rounded-lg">
                 <ul className="divide-y divide-gray-200">
-                  {cartItems.map(item => (
-                    <li key={item.id} className="flex items-center p-4 sm:p-6">
-                      <img src={item.imageUrl} alt={item.name} className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-md border" />
-                      <div className="ml-4 sm:ml-6 flex-grow flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
-                          <p className="text-gray-600 mt-1">${item.price.toFixed(2)}</p>
+                  {cartItems.map(item => {
+                    // Correctly handle different data structures for images and price
+                    const imageSrc = item.images?.[0] || item.image || 'https://placehold.co/400x400?text=No+Image';
+                    const priceValue = item.price?.$numberDecimal || item.price;
+
+                    return (
+                      // FIX: Use item._id for the unique key
+                      <li key={item._id} className="flex items-center p-4 sm:p-6">
+                        <img 
+                          src={imageSrc} 
+                          alt={item.name} 
+                          className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-md border" 
+                        />
+                        <div className="ml-4 sm:ml-6 flex-grow flex flex-col justify-between">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
+                            {/* FIX: Correctly format the price from the object or number */}
+                            <p className="text-gray-600 mt-1">${Number(priceValue).toFixed(2)}</p>
+                          </div>
+                          {/* Quantity Controls */}
+                          <div className="flex items-center mt-3">
+                            {/* FIX: Use item._id in function calls */}
+                            <button onClick={() => updateQuantity(item._id, item.quantity - 1)} className="p-1.5 border rounded-md hover:bg-gray-100 transition-colors">
+                              <Minus size={16} />
+                            </button>
+                            <span className="px-4 font-semibold w-12 text-center">{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item._id, item.quantity + 1)} className="p-1.5 border rounded-md hover:bg-gray-100 transition-colors">
+                              <Plus size={16} />
+                            </button>
+                          </div>
                         </div>
-                        {/* Quantity Controls */}
-                        <div className="flex items-center mt-3">
-                          <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-1.5 border rounded-md hover:bg-gray-100 transition-colors">
-                            <Minus size={16} />
-                          </button>
-                          <span className="px-4 font-semibold w-12 text-center">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-1.5 border rounded-md hover:bg-gray-100 transition-colors">
-                            <Plus size={16} />
-                          </button>
-                        </div>
-                      </div>
-                      <button onClick={() => removeItem(item.id)} className="ml-4 text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-red-50">
-                        <Trash2 size={20} />
-                      </button>
-                    </li>
-                  ))}
+                        {/* FIX: Use item._id in function calls */}
+                        <button onClick={() => removeItem(item._id)} className="ml-4 text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-red-50">
+                          <Trash2 size={20} />
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
               <div className="mt-6 flex justify-between items-center">

@@ -108,8 +108,16 @@ const Header = () => {
                 onClick={() => setShowDropdown((prev) => !prev)}
                 className="flex items-center text-gray-700 hover:text-amber-600"
               >
-                <span className="hidden sm:inline mr-1">Hi, {userInfo.name.split(' ')[0]}</span>
-                <ChevronDown className="w-4 h-4" />
+                {/* Mobile: Show User Icon */}
+                <span className="sm:hidden p-2">
+                  <User size={24} />
+                </span>
+                
+                {/* Desktop: Show Name and Chevron */}
+                <span className="hidden sm:flex items-center">
+                  <span>Hi, {userInfo.name.split(' ')[0]}</span>
+                  <ChevronDown className="w-4 h-4 ml-1" />
+                </span>
               </button>
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-44 bg-white border rounded shadow-md z-50">
